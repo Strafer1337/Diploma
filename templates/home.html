@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% for marker in markers %}
+    <article class="media content-section">
+      <div class="media-body">
+        <H3 class="article-title">Маркер # {{ marker.id }}</H3>
+        <p class="article-content">Широта: {{ marker.latitude }}<br>Долгота:{{ marker.longtitude }}<br>{{ marker.content }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endblock content %}

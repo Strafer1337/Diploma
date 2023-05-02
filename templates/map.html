@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>    
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />    
+  <script>
+      L_NO_TOUCH = false;
+      L_DISABLE_3D = false;
+  </script>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <title>Flask Map</title>
+  <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+  <style>#map1 {position:relative;top:0;bottom:0;right:0;left:0;}</style>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <style>
+      #map1 {
+          position: relative;
+          width: 100.0%;
+          height: 100.0%;
+          left: 0.0%;
+          top: 0.0%;
+      }
+      .leaflet-container { font-size: 1rem; }
+      .font4 {font-size: 16px}
+  </style>
+        
+</head>
+<body>
+  <header class="site-header font4">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        <a class="navbar-brand mr-4" href="/">Flask Map</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="/">Home</a>
+            <a class="nav-item nav-link" href="/about">About</a>
+            <a class="nav-item nav-link" href="/map">Map</a>
+          </div>
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/login">Login</a>
+            <a class="nav-item nav-link" href="/register">Register</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="folium-map" id="map1"></div>        
+</body>
+<script>
+  var map1 = L.map(
+      "map1",
+      {
+          center: [55.7522200, 37.6155600],
+          crs: L.CRS.EPSG3857,
+          zoom: 11,
+          zoomControl: true,
+          preferCanvas: false,
+      }
+  );
+
+  var TileLayer = L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+  ).addTo(map1); 
+  
+  {% block content %}
+  {% for marker in markers %}
+      var Ico{{ marker.id }} = L.AwesomeMarkers.icon({"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "{{ marker.color }}", "prefix": "glyphicon"});
+      var marker{{ marker.id }} = L.marker(
+          [{{ marker.latitude }}, {{ marker.longtitude }}],
+          {}
+      ).addTo(map1);
+      marker{{ marker.id }}.setIcon(Ico{{ marker.id }});
+      var popup{{ marker.id }} = L.popup({"maxWidth": "100%"});
+      var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 250px; height: 100.0%;">{{ marker.content }}</div>`)[0];
+      popup{{ marker.id }}.setContent(htmp_popup{{ marker.id }});
+      marker{{ marker.id }}.bindPopup(popup{{ marker.id }});
+  {% endfor %}
+  {% endblock content %}
+
+  {% block script %}
+    var POPUP = L.popup();
+    function latLngPop(e) {
+    data = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4);
+        POPUP
+            .setLatLng(e.latlng)
+            .setContent("<p>"+data+"</p>")
+            .openOn(map1)
+        }
+    map1.on('click', latLngPop);
+  {% endblock script %}
+
+  {% block markerpopup %}
+    var new_mark = L.marker();
+    function newMarker(e){
+    new_mark.setLatLng(e.latlng).addTo(map1);
+    new_mark.setZIndexOffset(-1);
+    new_mark.on('dblclick', function(e){
+      map1.removeLayer(e.target)})
+      var lat = e.latlng.lat.toFixed(4),
+      lng = e.latlng.lng.toFixed(4);
+      new_mark.bindPopup(
+      "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
+      maxWidth: "auto",
+      className: 'StreetViewPopup'
+    });
+    };
+    map1.on('dblclick', newMarker); 
+  {% endblock markerpopup %}
+  
+</script>
+</html>
+
