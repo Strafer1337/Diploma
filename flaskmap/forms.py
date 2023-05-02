@@ -10,19 +10,25 @@ class AddForm(FlaskForm):
     content = StringField('Описание', validators=[DataRequired()])
     submit = SubmitField('Добавить')
 
-    def validate_marker(self, latitude, longtitude):
-        marker = Marker.query.filter_by(latitude=latitude.data, longtitude=longtitude.data).first()
-        if marker:
-            raise ValidationError('Маркер с такими кооординатами уже создан!')
+    # def validate_on_submit(self, latitude, longtitude):
+    #     marker = Marker.query.filter_by(latitude=latitude.data, longtitude=longtitude.data).first()
+    #     if marker:
+    #         raise ValidationError('Маркер с такими кооординатами уже создан!')
         
     def validate_latitude(self, latitude):
         try:
             float(latitude.data)
         except ValueError:
             raise ValidationError('Неверное введена широта!')
+        marker = Marker.query.filter_by(latitude=self.latitude.data, longtitude=self.longtitude.data).first()
+        if marker:
+            raise ValidationError('Маркер с такими кооординатами уже создан!')
     
     def validate_longtitude(self, longtitude):
         try:
             float(longtitude.data)
         except ValueError:
-            raise ValidationError('Неверное введена долгота!') 
+            raise ValidationError('Неверное введена долгота!')
+        marker = Marker.query.filter_by(latitude=self.latitude.data, longtitude=self.longtitude.data).first()
+        if marker:
+            raise ValidationError('Маркер с такими кооординатами уже создан!') 

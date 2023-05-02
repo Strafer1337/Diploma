@@ -7,3 +7,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
 from flaskmap import routes
+
+from flaskmap.models import Marker
+
+with app.app_context():
+    db.create_all()
