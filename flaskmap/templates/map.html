@@ -115,31 +115,32 @@
     var POPUP = L.popup();
     function latLngPop(e) {
     data = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4);
-        POPUP
-            .setLatLng(e.latlng)
-            .setContent("<p>"+data+"</p>")
-            .openOn(map1)
-        }
+    params = "lat="+e.latlng.lat.toFixed(4)+"&lng="+e.latlng.lng.toFixed(4);
+      POPUP
+        .setLatLng(e.latlng)
+        .setContent("<p>"+data+"<br><a href=/add?"+params+">Добавить маркер</a><br></p>")
+        .openOn(map1)
+      }
     map1.on('click', latLngPop);
   {% endblock script %}
 
-  {% block markerpopup %}
-    var new_mark = L.marker();
-    function newMarker(e){
-    new_mark.setLatLng(e.latlng).addTo(map1);
-    new_mark.setZIndexOffset(-1);
-    new_mark.on('dblclick', function(e){
-      map1.removeLayer(e.target)})
-      var lat = e.latlng.lat.toFixed(4),
-      lng = e.latlng.lng.toFixed(4);
-      new_mark.bindPopup(
-      "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
-      maxWidth: "auto",
-      className: 'StreetViewPopup'
-    });
-    };
-    map1.on('dblclick', newMarker); 
-  {% endblock markerpopup %}
+  // {% block markerpopup %}
+  //   var new_mark = L.marker();
+  //   function newMarker(e){
+  //   new_mark.setLatLng(e.latlng).addTo(map1);
+  //   new_mark.setZIndexOffset(-1);
+  //   new_mark.on('dblclick', function(e){
+  //     map1.removeLayer(e.target)})
+  //     var lat = e.latlng.lat.toFixed(4),
+  //     lng = e.latlng.lng.toFixed(4);
+  //     new_mark.bindPopup(
+  //     "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
+  //     maxWidth: "auto",
+  //     className: 'StreetViewPopup'
+  //   });
+  //   };
+  //   map1.on('dblclick', newMarker); 
+  // {% endblock markerpopup %}
   
 </script>
 </html>
