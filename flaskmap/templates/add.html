@@ -51,22 +51,7 @@
         </form>
     </div>
     <script>
-        var getparams = (function() {
-            var a = window.location.search;
-            var b = new Object();
-            a = a.substring(1).split('&');
-            for (var i = 0; a < a.length; i++){
-                c = a[i].split('=');
-                b[c[0]]=c[1];
-            }
-            return b;
-        })(); 
-        document.write(getparams['lat'],'1<br>')
-        document.write(window.location.search, '<br>')
-        document.write(window.location.search.substring(1).split("&")[0].split('=')[0])
-
-
-        document.getElementsByName("latitude").value = getparams["lat"]
-        document.getElementsByName("longtitude").innerHTML = getparams["lat"]
+        document.getElementById("latitude").value = window.location.search.substring(1).split("&")[0].split('=')[1].toString();
+        document.getElementById("longtitude").value = window.location.search.substring(1).split("&")[1].split('=')[1].toString();
     </script>
 {% endblock content %}
