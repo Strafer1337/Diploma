@@ -56,10 +56,10 @@
             <a class="nav-item nav-link" href="/about">О карте</a>
           </div>
           <!-- Navbar Right Side -->
-          <div class="navbar-nav">
+          <!-- <div class="navbar-nav">
             <a class="nav-item nav-link" href="/login">Login</a>
             <a class="nav-item nav-link" href="/register">Register</a>
-          </div>
+          </div> -->
         </div>
       </div>
     </nav>
@@ -105,7 +105,11 @@
       ).addTo(map1);
       marker{{ marker.id }}.setIcon(Ico{{ marker.id }});
       var popup{{ marker.id }} = L.popup({"maxWidth": "100%"});
-      var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 250px; height: 100.0%;">{{ marker.content }}</div>`)[0];
+      var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 150px; height: 100.0%;">
+        ID: {{ marker.id }}<br>
+        Широта: {{ marker.latitude }}<br>
+        Долгота: {{ marker.longtitude }}<br>
+        {{ marker.content }}</div>`)[0];
       popup{{ marker.id }}.setContent(htmp_popup{{ marker.id }});
       marker{{ marker.id }}.bindPopup(popup{{ marker.id }});
   {% endfor %}
@@ -124,23 +128,23 @@
     map1.on('click', latLngPop);
   {% endblock script %}
 
-  // {% block markerpopup %}
-  //   var new_mark = L.marker();
-  //   function newMarker(e){
-  //   new_mark.setLatLng(e.latlng).addTo(map1);
-  //   new_mark.setZIndexOffset(-1);
-  //   new_mark.on('dblclick', function(e){
-  //     map1.removeLayer(e.target)})
-  //     var lat = e.latlng.lat.toFixed(4),
-  //     lng = e.latlng.lng.toFixed(4);
-  //     new_mark.bindPopup(
-  //     "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
-  //     maxWidth: "auto",
-  //     className: 'StreetViewPopup'
-  //   });
-  //   };
-  //   map1.on('dblclick', newMarker); 
-  // {% endblock markerpopup %}
+  {% block markerpopup %}
+    var new_mark = L.marker();
+    function newMarker(e){
+    new_mark.setLatLng(e.latlng).addTo(map1);
+    new_mark.setZIndexOffset(-1);
+    new_mark.on('dblclick', function(e){
+      map1.removeLayer(e.target)})
+      var lat = e.latlng.lat.toFixed(4),
+      lng = e.latlng.lng.toFixed(4);
+      new_mark.bindPopup(
+      "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
+      maxWidth: "auto",
+      className: 'StreetViewPopup'
+    });
+    };
+    map1.on('dblclick', newMarker); 
+  {% endblock markerpopup %}
   
 </script>
 </html>
