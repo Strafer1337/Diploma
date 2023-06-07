@@ -1,3 +1,4 @@
+from datetime import datetime
 from flaskmap import db
 
 class Marker(db.Model):
@@ -6,7 +7,6 @@ class Marker(db.Model):
     longtitude = db.Column(db.Float, nullable=False)
     content = db.Column(db.String(200), nullable=False)
     color = db.Column(db.String(10), nullable=False, default='red')
-    upvotes = db.Columd(db.Integer, nullable=True, default=0)
 
     def __repr__(self):
         return f"Marker('{self.id}', '{self.latitude}', '{self.longtitude}')"
@@ -16,7 +16,8 @@ class Comment(db.Model):
     author = db.Column(db.String(30), nullable=False)
     content = db.Column(db.String(200), nullable=False)
     marker_id = db.Column(db.Integer, db.ForeignKey('marker.id'), nullable=False)
-    upvotes = db.Columd(db.Integer, nullable=True, default=0)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    upvotes = db.Column(db.Integer, nullable=True, default=0)
 
     def __repr__(self):
         return f"Comment('{self.id}'. {self.author}: '{self.content}; Upvotes: {self.upvotes}')"

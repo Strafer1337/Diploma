@@ -98,6 +98,7 @@
   
   {% block content %}
   {% for marker in markers %}
+      {% set comment = dict.get(marker.id) %}
       var Ico{{ marker.id }} = L.AwesomeMarkers.icon({"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "{{ marker.color }}", "prefix": "glyphicon"});
       var marker{{ marker.id }} = L.marker(
           [{{ marker.latitude }}, {{ marker.longtitude }}],
@@ -105,11 +106,27 @@
       ).addTo(map1);
       marker{{ marker.id }}.setIcon(Ico{{ marker.id }});
       var popup{{ marker.id }} = L.popup({"maxWidth": "100%"});
-      var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 150px; height: 100.0%;">
-        ID: {{ marker.id }}<br>
+      param = "id="+{{ marker.id }};
+      var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 220px; height: 100.0%;">
+        <h4>{{ marker.content }}</h4>
         Широта: {{ marker.latitude }}<br>
-        Долгота: {{ marker.longtitude }}<br>
-        {{ marker.content }}</div>`)[0];
+        Долгота: {{ marker.longtitude }}<br><hr>
+        {% if comment %}
+          <h5>Самый популярный комментарий</h5>
+          <div>
+            <span>Автор: </span><a class="mr-2" href="#">{{ comment.author }}</a>
+            <small class="text-muted">{{ comment.date_posted.strftime('%Y-%m-%d') }}</small>
+            <div style="float: right">
+            <img src="/static/like.jpeg" height="13px" width="13px"></img>
+            <span style="font-size: 10px;">&nbsp;&nbsp;{{comment.upvotes}}&nbsp;&nbsp;</span>
+          </div>
+          </div>
+          <h5 class="article-content"; style="padding-top: 7px;">{{ comment.content }}</h5>
+          <hr>
+        {% endif %}
+        <a type="button" class="btn btn-outline-primary" href=/comments/{{ marker.id }}>Посмотреть комментарии</a>
+        <a type="button" class="btn btn-outline-danger" href="/delete_mr/{{ marker.id }}">Удалить</a></div>`)[0];
+        
       popup{{ marker.id }}.setContent(htmp_popup{{ marker.id }});
       marker{{ marker.id }}.bindPopup(popup{{ marker.id }});
   {% endfor %}
@@ -128,23 +145,23 @@
     map1.on('click', latLngPop);
   {% endblock script %}
 
-  {% block markerpopup %}
-    var new_mark = L.marker();
-    function newMarker(e){
-    new_mark.setLatLng(e.latlng).addTo(map1);
-    new_mark.setZIndexOffset(-1);
-    new_mark.on('dblclick', function(e){
-      map1.removeLayer(e.target)})
-      var lat = e.latlng.lat.toFixed(4),
-      lng = e.latlng.lng.toFixed(4);
-      new_mark.bindPopup(
-      "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
-      maxWidth: "auto",
-      className: 'StreetViewPopup'
-    });
-    };
-    map1.on('dblclick', newMarker); 
-  {% endblock markerpopup %}
+  // {% block markerpopup %}
+  //   var new_mark = L.marker();
+  //   function newMarker(e){
+  //   new_mark.setLatLng(e.latlng).addTo(map1);
+  //   new_mark.setZIndexOffset(-1);
+  //   new_mark.on('dblclick', function(e){
+  //     map1.removeLayer(e.target)})
+  //     var lat = e.latlng.lat.toFixed(4),
+  //     lng = e.latlng.lng.toFixed(4);
+  //     new_mark.bindPopup(
+  //     "<a href=https://www.google.com/maps?layer=c&cbll=" + lat + "," + lng + " target=blank><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_Street_View_icon.svg/256px-Google_Street_View_icon.svg.png' width=70 title=StreetView class=StreetViewImage></img></a>",{
+  //     maxWidth: "auto",
+  //     className: 'StreetViewPopup'
+  //   });
+  //   };
+  //   map1.on('dblclick', newMarker); 
+  // {% endblock markerpopup %}
   
 </script>
 </html>

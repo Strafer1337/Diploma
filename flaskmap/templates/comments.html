@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <H3 class="article-title">{{ marker.content }}</H3>
+      <p class="article-content">Широта: {{ marker.latitude }}<br>Долгота: {{ marker.longtitude }}</p>
+    </div>
+  </article>
+  {% for comment in comments %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+            <span>Автор: </span><a class="mr-2" href="#">{{ comment.author }}</a>
+            <small class="text-muted">{{ comment.date_posted.strftime('%Y-%m-%d') }}</small>
+        </div>
+        <blockquote><h4 class="article-content" style="padding-top: 23px;">{{ comment.content }}</h4></blockquote>
+        <hr>
+        <div>
+            <a href="/like/{{ comment.id }}"><img src="/static/like.jpeg" height="35px" width="35px"></img></a>
+            <span style="font-size: 20px;">&nbsp;&nbsp;{{comment.upvotes}}&nbsp;&nbsp;</span>
+            <a href="/dislike/{{ comment.id }}"><img src="/static/dislike.jpeg" height="35px" width="35px"></img></a>
+            <a type="button" class="btn btn-danger" href="/delete/{{ comment.id }}" style="float: right">Удалить</a> 
+        </div>
+        
+        
+
+        <!-- <a type="button" class="btn btn-success" href="/like/{{ comment.id }}">Нравится</a>        
+        <a type="button" class="btn btn-warning" href="/dislike/{{ comment.id }}">Не нравится</a>  -->
+        
+        <!-- <button type="button" class="btn btn-danger">Danger</button> -->
+      </div>
+           
+    </article>
+  {% endfor %}
+  
+{% endblock content %}
+
+{% block sidebar %}
+  <div class="col-md-4">
+    <div class="content-section">
+      <h3>Меню</h3>
+      <!-- <p class='text-muted'>You can put any information here you'd like.
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-light">Latest Posts</li>
+          <li class="list-group-item list-group-item-light">Announcements</li>
+          <li class="list-group-item list-group-item-light">Calendars</li>
+          <li class="list-group-item list-group-item-light">etc</li>
+        </ul>
+      </p> -->
+      <a type="button" class="btn btn-primary" href="/add_comment/{{ marker.id }}">Добавить комментарий</a>
+    </div>
+  </div>
+{% endblock sidebar %}

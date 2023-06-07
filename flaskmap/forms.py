@@ -8,6 +8,7 @@ class AddForm(FlaskForm):
     latitude = StringField('Широта', validators=[DataRequired()])
     longtitude = StringField('Долгота', validators=[DataRequired()])
     content = StringField('Описание', validators=[DataRequired()])
+    color = StringField('Цвет (указывать на английском, по умолчанию - красный)')
     submit = SubmitField('Добавить')
 
     # def validate_on_submit(self, latitude, longtitude):
@@ -32,3 +33,8 @@ class AddForm(FlaskForm):
         marker = Marker.query.filter_by(latitude=self.latitude.data, longtitude=self.longtitude.data).first()
         if marker:
             raise ValidationError('Маркер с такими кооординатами уже создан!') 
+        
+class AddComment(FlaskForm):
+    author = StringField('Автор', validators=[DataRequired()])
+    content = StringField('Комментарий', validators=[DataRequired()])
+    submit = SubmitField('Добавить')
