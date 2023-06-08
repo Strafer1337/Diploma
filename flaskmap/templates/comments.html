@@ -12,7 +12,7 @@
       <span class="article-content col" style="margin-top: 5px; float: right;"><b>Долгота: </b>{{ marker.longtitude }}</span>
     </div>
     <hr>
-    <p class="article-content" style="font-size: 20px;"><b>Описание: </b>{{ marker.content }}</p>
+    <p class="article-content" style="font-size: 20px;"><b>Описание: </b><br>{{ marker.content }}</p>
   </div>
 </article>
   {% for comment in comments %}
@@ -53,9 +53,11 @@
       <hr>
       <a type="button" class="btn btn-success col" target="_blank" href="https://yandex.ru/maps/?rtext=55.7549,37.7082~{{marker.latitude}},{{marker.longtitude}}&rtt=auto" style="color: white">Построить маршрут</a>
       <hr>
+      <a type="button" class="btn btn-warning col" href="/comments/{{ marker.id }}/update" style="color: white">Редактировать</a>
+      <hr>
       <a type="button" class="btn btn-primary col" href="/add_comment/{{ marker.id }}" style="color: white"">Добавить комментарий</a>
       <hr>
-      <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}" style="color: white">Удалить метку</a>
+      <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}/list" style="color: white">Удалить метку</a>
     </div>
   </div>
 {% endblock sidebar %}

@@ -13,9 +13,9 @@
           <span class="article-content col" style="margin-top: 5px; float: right;"><b>Долгота: </b>{{ marker.longtitude }}</span>
         </div>
         <hr>
-        <p class="article-content" style="font-size: 20px;"><b>Описание: </b>{{ marker.content }}</p>
+        <p class="article-content" style="font-size: 20px;"><b>Описание: </b><br>{{ marker.content }}</p>
         <hr>
-        <a type="button" class="btn btn-primary" href="/comments/{{ marker.id }}" style="color: white; float: right;">Меню</a>
+        <a type="button" class="col btn btn-primary" href="/comments/{{ marker.id }}" style="color: white">Открыть</a>
       </div>
     </article>
   {% endfor %}

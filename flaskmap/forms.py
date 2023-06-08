@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length
 from flaskmap.models import Marker
 
@@ -9,7 +9,7 @@ class AddForm(FlaskForm):
     author = StringField('Автор', validators=[DataRequired()])
     latitude = StringField('Широта', validators=[DataRequired()])
     longtitude = StringField('Долгота', validators=[DataRequired()])
-    content = StringField('Описание', validators=[DataRequired()])
+    content = TextAreaField('Описание', validators=[DataRequired()])
     color = SelectField('Цвет', choices=[('red', 'Красный'), ('blue', 'Синий'), ('green', 'Зеленый'),
                                          ('purple','Фиолетовый'), ('orange','Оранжевый'), ('black','Черный')])
     icon = SelectField('Иконка', choices=[('info-sign','Информация'), ('user', 'Человек'), ('warning-sign', 'Важно'),
@@ -34,7 +34,15 @@ class AddForm(FlaskForm):
         if marker:
             raise ValidationError('Маркер с такими кооординатами уже создан!') 
         
+class UpdateForm(FlaskForm):
+    content = TextAreaField('Описание', validators=[DataRequired()])
+    color = SelectField('Цвет', choices=[('red', 'Красный'), ('blue', 'Синий'), ('green', 'Зеленый'),
+                                         ('purple','Фиолетовый'), ('orange','Оранжевый'), ('black','Черный')])
+    icon = SelectField('Иконка', choices=[('info-sign','Информация'), ('user', 'Человек'), ('warning-sign', 'Важно'),
+                                          ('home','Здание'), ('tree-deciduous', 'Дерево'), ('file','Документы')])
+    submit = SubmitField('Изменить')
+        
 class AddComment(FlaskForm):
     author = StringField('Автор', validators=[DataRequired()])
-    content = StringField('Комментарий', validators=[DataRequired()])
+    content = TextAreaField('Комментарий', validators=[DataRequired()])
     submit = SubmitField('Добавить')

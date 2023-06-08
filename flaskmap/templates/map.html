@@ -133,8 +133,8 @@
         {% endif %}
         <div class="row">
           <a type="button" class="btn btn-success col" target="_blank" href="https://yandex.ru/maps/?rtext=55.7549,37.7082~{{marker.latitude}},{{marker.longtitude}}&rtt=auto" style="color: white">Маршрут</a>&nbsp;
-          <a type="button" class="btn btn-primary col" href="/comments/{{ marker.id }}" style="color: white">Комментарии</a>&nbsp;
-          <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}" style="color: white">Удалить</a>
+          <a type="button" class="btn btn-primary col" href="/comments/{{ marker.id }}" style="color: white">Перейти</a>&nbsp;
+          <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}/map" style="color: white">Удалить</a>
         </div>
         </div>`)[0];
 
