@@ -1,20 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Length
 from flaskmap.models import Marker
 
 
 class AddForm(FlaskForm):
+    name = StringField('Название', validators=[DataRequired()])
+    author = StringField('Автор', validators=[DataRequired()])
     latitude = StringField('Широта', validators=[DataRequired()])
     longtitude = StringField('Долгота', validators=[DataRequired()])
     content = StringField('Описание', validators=[DataRequired()])
-    color = StringField('Цвет (указывать на английском, по умолчанию - красный)')
+    color = SelectField('Цвет', choices=[('red', 'Красный'), ('blue', 'Синий'), ('green', 'Зеленый'),
+                                         ('purple','Фиолетовый'), ('orange','Оранжевый'), ('black','Черный')])
+    icon = SelectField('Иконка', choices=[('info-sign','Информация'), ('user', 'Человек'), ('warning-sign', 'Важно'),
+                                          ('home','Здание'), ('tree-deciduous', 'Дерево'), ('file','Документы')])
     submit = SubmitField('Добавить')
-
-    # def validate_on_submit(self, latitude, longtitude):
-    #     marker = Marker.query.filter_by(latitude=latitude.data, longtitude=longtitude.data).first()
-    #     if marker:
-    #         raise ValidationError('Маркер с такими кооординатами уже создан!')
         
     def validate_latitude(self, latitude):
         try:

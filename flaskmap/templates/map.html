@@ -44,16 +44,15 @@
   <header class="site-header font4">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
       <div class="container">
-        <a class="navbar-brand mr-4" href="/">Flask Map</a>
+        <a class="navbar-brand mr-4" href="/map" style="font-size: 20px">Flask Map</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
           <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="/">Домашняя страница</a>            
-            <a class="nav-item nav-link" href="/map">Карта</a>
-            <a class="nav-item nav-link" href="/add">Добавить маркер</a>
-            <a class="nav-item nav-link" href="/about">О карте</a>
+            <a class="nav-item nav-link" href="/">&nbsp;&nbsp;Список</a> 
+            <a class="nav-item nav-link" href="/add">&nbsp;&nbsp;Добавить маркер</a>
+            <a class="nav-item nav-link" href="/about">&nbsp;&nbsp;О карте</a>
           </div>
           <!-- Navbar Right Side -->
           <!-- <div class="navbar-nav">
@@ -99,7 +98,7 @@
   {% block content %}
   {% for marker in markers %}
       {% set comment = dict.get(marker.id) %}
-      var Ico{{ marker.id }} = L.AwesomeMarkers.icon({"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "{{ marker.color }}", "prefix": "glyphicon"});
+      var Ico{{ marker.id }} = L.AwesomeMarkers.icon({"extraClasses": "fa-rotate-0", "icon": "{{ marker.icon }}", "iconColor": "white", "markerColor": "{{ marker.color }}", "prefix": "glyphicon"});
       var marker{{ marker.id }} = L.marker(
           [{{ marker.latitude }}, {{ marker.longtitude }}],
           {}
@@ -108,14 +107,22 @@
       var popup{{ marker.id }} = L.popup({"maxWidth": "100%"});
       param = "id="+{{ marker.id }};
       var htmp_popup{{ marker.id }} = $(`<div id="htmp_popup1" style="width: 220px; height: 100.0%;">
-        <h4>{{ marker.content }}</h4>
-        Широта: {{ marker.latitude }}<br>
-        Долгота: {{ marker.longtitude }}<br><hr>
+        <h4>{{ marker.name }}</h4>
+        <div>
+            <span>Автор: </span><a class="mr-2" href="#">{{ marker.author }}</a>
+            <small class="text-muted">{{ marker.date_posted.strftime('%d-%m-%Y') }}</small>
+        </div><hr>
+        <div class="row">
+          <span class="col"><b>Широта:</b> {{ marker.latitude }}</span>
+          <span class="col"><b>Долгота:</b> {{ marker.longtitude }}</span>          
+        </div><br>
+        <span><b>Описание:</b> {{ marker.content }}</span>
+        <hr>
         {% if comment %}
           <h5>Самый популярный комментарий</h5>
           <div>
             <span>Автор: </span><a class="mr-2" href="#">{{ comment.author }}</a>
-            <small class="text-muted">{{ comment.date_posted.strftime('%Y-%m-%d') }}</small>
+            <small class="text-muted">{{ comment.date_posted.strftime('%d-%m-%Y') }}</small>
             <div style="float: right">
             <img src="/static/like.jpeg" height="13px" width="13px"></img>
             <span style="font-size: 10px;">&nbsp;&nbsp;{{comment.upvotes}}&nbsp;&nbsp;</span>
@@ -124,8 +131,14 @@
           <h5 class="article-content"; style="padding-top: 7px;">{{ comment.content }}</h5>
           <hr>
         {% endif %}
-        <a type="button" class="btn btn-outline-primary" href=/comments/{{ marker.id }}>Посмотреть комментарии</a>
-        <a type="button" class="btn btn-outline-danger" href="/delete_mr/{{ marker.id }}">Удалить</a></div>`)[0];
+        <div class="row">
+          <a type="button" class="btn btn-success col" target="_blank" href="https://yandex.ru/maps/?rtext=55.7549,37.7082~{{marker.latitude}},{{marker.longtitude}}&rtt=auto" style="color: white">Маршрут</a>&nbsp;
+          <a type="button" class="btn btn-primary col" href="/comments/{{ marker.id }}" style="color: white">Комментарии</a>&nbsp;
+          <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}" style="color: white">Удалить</a>
+        </div>
+        </div>`)[0];
+
+        // https://yandex.ru/maps/10738/lubercy/?ll=37.910907%2C55.690172&mode=routes&rtext=55.755737%2C37.708106~55.689619%2C37.910477&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D1081818069~&z=17.32
         
       popup{{ marker.id }}.setContent(htmp_popup{{ marker.id }});
       marker{{ marker.id }}.bindPopup(popup{{ marker.id }});
@@ -139,7 +152,7 @@
     params = "lat="+e.latlng.lat.toFixed(4)+"&lng="+e.latlng.lng.toFixed(4);
       POPUP
         .setLatLng(e.latlng)
-        .setContent("<p>"+data+"<br><a href=/add?"+params+">Добавить маркер</a><br></p>")
+        .setContent("<span>"+data+"</span><br><a type='button' class='btn btn-primary' style='color: white' href=/add?"+params+">Добавить маркер</a><br>")
         .openOn(map1)
       }
     map1.on('click', latLngPop);

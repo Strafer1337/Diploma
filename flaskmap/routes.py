@@ -1,32 +1,7 @@
 from flask import render_template, url_for, redirect
-from sqlalchemy import func
 from flaskmap import app, db
 from flaskmap.forms import AddForm, AddComment
 from flaskmap.models import Marker, Comment 
-
-# markers = [
-#     {
-#         'id': 1,
-#         'latitude': 55.70045,
-#         'longtitude': 37.87769,
-#         'content': 'Москва, ул. Камова, д. 28',
-#         'color': 'red'
-#     },
-#     {
-#         'id': 2,
-#         'latitude': 55.88104,
-#         'longtitude': 37.68363,
-#         'content': 'Москва, ул. Тайнинская, д. 9',
-#         'color': 'green'
-#     },
-#     {
-#         'id': 3,
-#         'latitude': 55.751999,
-#         'longtitude': 37.617734,
-#         'content': 'Московский кремль',
-#         'color': 'orange'
-#     }
-# ]
 
 @app.route("/")
 @app.route("/home")
@@ -51,8 +26,12 @@ def map():
 def add_marker():
     form = AddForm()
     if form.validate_on_submit():
-        marker = Marker(latitude=float(form.latitude.data), longtitude=float(form.longtitude.data), content=form.content.data, 
-                        color=form.color.data)
+        marker = Marker(name=form.name.data, 
+                        author=form.author.data,
+                        latitude=float(form.latitude.data),
+                        longtitude=float(form.longtitude.data),
+                        content=form.content.data, 
+                        color=form.color.data, icon=form.icon.data)
         db.session.add(marker)
         db.session.commit()
         return redirect(url_for('map'))
@@ -62,7 +41,9 @@ def add_marker():
 def add_comment(marker_id):
     form = AddComment()
     if form.validate_on_submit():
-        comment = Comment(author=form.author.data, content=form.content.data, marker_id=marker_id) #####
+        comment = Comment(author=form.author.data, 
+                          content=form.content.data, 
+                          marker_id=marker_id)
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for('list_comments', marker_id=comment.marker_id))
@@ -70,7 +51,7 @@ def add_comment(marker_id):
 
 @app.route("/comments/<int:marker_id>", methods=['GET', 'POST'])
 def list_comments(marker_id):
-    comments = Comment.query.filter_by(marker_id=marker_id).all()
+    comments = Comment.query.filter_by(marker_id=marker_id).order_by(Comment.upvotes.desc()).all()
     marker = Marker.query.filter_by(id=marker_id).first()
     return render_template('comments.html', title='Comment', comments=comments, marker=marker)
 
@@ -95,7 +76,7 @@ def delete(id):
     db.session.commit()
     return redirect(url_for('list_comments', marker_id=comment.marker_id))
 
-# убрать
+# убрать ?
 @app.route("/delete_mr/<int:id>", methods=['GET'])
 def delete_mr(id):
     marker=Marker.query.filter_by(id=id).first()

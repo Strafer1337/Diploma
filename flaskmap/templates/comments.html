@@ -1,17 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-  <article class="media content-section">
-    <div class="media-body">
-      <H3 class="article-title">{{ marker.content }}</H3>
-      <p class="article-content">Широта: {{ marker.latitude }}<br>Долгота: {{ marker.longtitude }}</p>
+<article class="media content-section">
+  <div class="media-body">
+    <H3 class="article-title">Название: {{ marker.name }}</H3>
+    <div class="article-metadata">
+      <span>Автор: </span><a class="mr-2" href="#">{{ marker.author }}</a>
+      <small class="text-muted">{{ marker.date_posted.strftime('%d-%m-%Y') }}</small>
     </div>
-  </article>
+    <div class="row">
+      <span class="article-content col" style="margin-top: 5px;"><b>Широта: </b>{{ marker.latitude }}</span>
+      <span class="article-content col" style="margin-top: 5px; float: right;"><b>Долгота: </b>{{ marker.longtitude }}</span>
+    </div>
+    <hr>
+    <p class="article-content" style="font-size: 20px;"><b>Описание: </b>{{ marker.content }}</p>
+  </div>
+</article>
   {% for comment in comments %}
     <article class="media content-section">
       <div class="media-body">
         <div class="article-metadata">
             <span>Автор: </span><a class="mr-2" href="#">{{ comment.author }}</a>
-            <small class="text-muted">{{ comment.date_posted.strftime('%Y-%m-%d') }}</small>
+            <small class="text-muted">{{ comment.date_posted.strftime('%d-%m-%Y') }}</small>
         </div>
         <blockquote><h4 class="article-content" style="padding-top: 23px;">{{ comment.content }}</h4></blockquote>
         <hr>
@@ -21,24 +30,15 @@
             <a href="/dislike/{{ comment.id }}"><img src="/static/dislike.jpeg" height="35px" width="35px"></img></a>
             <a type="button" class="btn btn-danger" href="/delete/{{ comment.id }}" style="float: right">Удалить</a> 
         </div>
-        
-        
-
-        <!-- <a type="button" class="btn btn-success" href="/like/{{ comment.id }}">Нравится</a>        
-        <a type="button" class="btn btn-warning" href="/dislike/{{ comment.id }}">Не нравится</a>  -->
-        
-        <!-- <button type="button" class="btn btn-danger">Danger</button> -->
-      </div>
-           
+      </div>           
     </article>
-  {% endfor %}
-  
+  {% endfor %}  
 {% endblock content %}
 
 {% block sidebar %}
   <div class="col-md-4">
     <div class="content-section">
-      <h3>Меню</h3>
+      <h3 style="text-align: center; padding-top: 10px;">Меню</h3><hr>
       <!-- <p class='text-muted'>You can put any information here you'd like.
         <ul class="list-group">
           <li class="list-group-item list-group-item-light">Latest Posts</li>
@@ -47,7 +47,15 @@
           <li class="list-group-item list-group-item-light">etc</li>
         </ul>
       </p> -->
-      <a type="button" class="btn btn-primary" href="/add_comment/{{ marker.id }}">Добавить комментарий</a>
+      <a type="button" class="btn btn-dark col" href="/home">К списку меток</a>
+      <hr>
+      <a type="button" class="btn btn-info col" href="/map">Открыть карту</a>
+      <hr>
+      <a type="button" class="btn btn-success col" target="_blank" href="https://yandex.ru/maps/?rtext=55.7549,37.7082~{{marker.latitude}},{{marker.longtitude}}&rtt=auto" style="color: white">Построить маршрут</a>
+      <hr>
+      <a type="button" class="btn btn-primary col" href="/add_comment/{{ marker.id }}" style="color: white"">Добавить комментарий</a>
+      <hr>
+      <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}" style="color: white">Удалить метку</a>
     </div>
   </div>
 {% endblock sidebar %}
