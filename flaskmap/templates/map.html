@@ -137,9 +137,6 @@
           <a type="button" class="btn btn-danger col" href="/delete_mr/{{ marker.id }}/map" style="color: white">Удалить</a>
         </div>
         </div>`)[0];
-
-        // https://yandex.ru/maps/10738/lubercy/?ll=37.910907%2C55.690172&mode=routes&rtext=55.755737%2C37.708106~55.689619%2C37.910477&rtt=auto&ruri=ymapsbm1%3A%2F%2Forg%3Foid%3D1081818069~&z=17.32
-        
       popup{{ marker.id }}.setContent(htmp_popup{{ marker.id }});
       marker{{ marker.id }}.bindPopup(popup{{ marker.id }});
   {% endfor %}
